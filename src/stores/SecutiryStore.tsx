@@ -1,21 +1,47 @@
 import create from 'zustand';
+import { persist } from 'zustand/middleware';
 import { Credentials } from '../models/Credentials';
 
-import jwt_decode from "jwt-decode";
+// const { REACT_APP_TOKEN_HEADER, REACT_APP_TOKEN_STORAGE_KEY } = process.env;
 
-const { REACT_APP_TOKEN_HEADER, REACT_APP_TOKEN_STORAGE_KEY } = process.env;
-
-const setToken = (token: string) => {
-    localStorage.setItem(REACT_APP_TOKEN_STORAGE_KEY!, token);
+interface TokenStore {
+    token?: string;
+    setToken?: (token: string | undefined) => void
 }
 
-const securityStore = create(set => ({
+interface SecutiryStore {
+    user: User | undefined;
+    login: (credentials: Credentials) => Promise<void | Response>
+}
+
+interface User {
+    name: string;
+    email: string;
+}
+
+
+const tokenStore = create(
+    persist(
+        (set, get) => ({
+            token: undefined,
+            setToken: () => set((token) => ({ token }))
+        }),
+        {
+            name: "AUTH_TOKEN",
+            getStorage: () => sessionStorage,
+        }
+    ));
+
+export const securityStore = create<SecutiryStore>(set => ({
     user: undefined,
     login: async (credentials: Credentials) => {
+        console.log(credentials);
         return fetch("/login", { body: JSON.stringify(credentials), method: "POST" }).then(res => {
             if (res.status === 200) {
-                const token = res.headers.get(REACT_APP_TOKEN_HEADER!);
-                setToken(token!);
+                // const token = res.headers.get(REACT_APP_TOKEN_HEADER!);
+                // const { setToken } = tokenStore();
+
+                // setToken(token);
             }
         });
     }

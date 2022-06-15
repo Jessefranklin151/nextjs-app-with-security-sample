@@ -1,8 +1,22 @@
+import { useState } from 'react'
+import LoginModal from './LoginModal'
 
 const SignInSignUpButtons = () => {
+    
+    let [isOpen, setIsOpen] = useState(false)
+
+    function closeModal() {
+        setIsOpen(false)
+    }
+
+    function openModal() {
+        setIsOpen(true)
+    }
+
+
     return (
         <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <a href="#" className="whitespace-nowrap text-base font-medium text-white hover:font-bold">
+            <a href="#" onClick={openModal} className="whitespace-nowrap text-base font-medium text-white hover:font-bold">
                 Sign in
             </a>
             <a
@@ -11,6 +25,9 @@ const SignInSignUpButtons = () => {
             >
                 Sign up
             </a>
+            <div>
+                <LoginModal isOpen={isOpen} closeModal={closeModal} />
+            </div>
         </div>
     );
 }
