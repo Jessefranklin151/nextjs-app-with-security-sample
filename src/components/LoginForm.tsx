@@ -1,10 +1,10 @@
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import { Credentials } from '../models/Credentials';
-import { securityStore } from '../stores/SecutiryStore';
+import { useSecurityStore } from '../stores/SecutiryStore';
 
 export default function LoginForm() {
 
-    const { login } = securityStore();
+    const { login } = useSecurityStore();
 
     const onSubmit = (
         values: Credentials,

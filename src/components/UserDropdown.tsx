@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { securityStore } from '../stores/SecutiryStore';
+import { useSecurityStore } from '../stores/SecutiryStore';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
@@ -8,7 +8,7 @@ function classNames(...classes: string[]) {
 
 const UserDropdown = () => {
 
-    const { user, singout } = securityStore();
+    const { user, singout } = useSecurityStore();
 
     return (<Menu as="div" className="ml-3 relative">
         <div>

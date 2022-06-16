@@ -1,10 +1,10 @@
-import { securityStore } from "../stores/SecutiryStore";
+import { useSecurityStore } from "../stores/SecutiryStore";
 import SignInSignUpButtons from "./SignInSignUpButtons";
 import UserDropdown from "./UserDropdown";
 
 export default function Header() {
 
-    const { logged } = securityStore();
+    const { logged } = useSecurityStore();
     
     return (
         <div className="bg-gray-800">

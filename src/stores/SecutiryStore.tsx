@@ -16,7 +16,7 @@ interface User {
     email: string;
 }
 
-export const securityStore = create<SecutiryStore, [["zustand/persist", Partial<SecutiryStore>]]>(
+export const useSecurityStore = create<SecutiryStore, [["zustand/persist", Partial<SecutiryStore>]]>(
     persist(
         (set) => ({
             user: undefined,
