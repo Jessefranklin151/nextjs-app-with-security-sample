@@ -14,12 +14,12 @@ app.use(cors(corsOptions));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-app.listen(3000);
+app.listen(3333);
 
 createDatabaseExample();
 
 app.post("/api/v1/login", async (req, res) => {
-    const { username, password } = await req.body;
+    const { username, password, name } = await req.body;
     const user = db.find(user => user.username === username);
 
     if (!user) {
@@ -35,7 +35,7 @@ app.post("/api/v1/login", async (req, res) => {
                     expiresIn: 3600 // expires in 1hr
                 });
                 res.setHeader('Authorization', `bearer ${token}`);
-                res.json();
+                res.json(user);
             } else {
                 res.status(401)
                 res.json({
@@ -50,7 +50,7 @@ app.post("/api/v1/login", async (req, res) => {
 app.post("/api/v1/user", async (req, res) => {
     const { username, password } = req.body;
     const user = await saveUser(username, password);
-    res.json({ id: user.id, username: user.username });
+    res.json({ id: user.id, username: user.username, name: user.name });
 })
 
 app.get("/api/v1/user", (req, res) => {
@@ -58,14 +58,15 @@ app.get("/api/v1/user", (req, res) => {
 })
 
 function createDatabaseExample() {
-    saveUser("admin", "admin");
+    saveUser("adm", "admin", "admin");
 }
 
-async function saveUser(username, passwordToBeHashed) {
+async function saveUser(name, username, passwordToBeHashed) {
     const index = db.length;
     const hashedPassword = await bcrypt.hash(passwordToBeHashed, 10);
     const user = {
         id: index,
+        name: name,
         username: username,
         password: hashedPassword
     };

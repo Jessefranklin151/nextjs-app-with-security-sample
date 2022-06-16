@@ -3,22 +3,29 @@ import { persist } from 'zustand/middleware';
 import type Credentials from '../types/Credentials';
 import type SecurityStore from '../types/SecurityStore';
 
+import HttpClient from '../core/http-client-adapter';
+
 const useSecurityStore = create<SecurityStore>(
     persist(
-        (set, get) => ({
+        (set, _get) => ({
             user: undefined,
             logged: false,
             token: undefined,
             login: async (credentials: Credentials) => {
-                console.log(credentials);
-                const response = await fetch("/api/login", { body: JSON.stringify(credentials), method: "POST" });
+                const response = await HttpClient.post("/api/login", JSON.stringify(credentials))
+                console.log(response)
                 if (response.status === 200) {
                     const authToken = response.headers.get("Authorization");
-                    const user = await response.json();
-                    console.log(user);
-                    set(({ token: authToken, logged: true, user }))
+                    const user = response.json();
+                    set(({ token: authToken, logged: true }))
                     return user;
                 }
+            },
+            getUser: async () => {
+                const response = await HttpClient.get("/api/user");
+                const user = await response.json();
+                set(({ user }))
+                return user;
             },
             signOut: () => set(() => ({ token: undefined, logged: false, user: undefined })),
         }),

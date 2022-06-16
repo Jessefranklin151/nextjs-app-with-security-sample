@@ -6,5 +6,6 @@ export default interface SecurityStore {
     login: (credentials: Credentials) => Promise<User | undefined>;
     logged: boolean;
     token?: string | null;
-    signOut: () => void
+    signOut: () => void,
+    getUser: () => Promise<User>
 }
