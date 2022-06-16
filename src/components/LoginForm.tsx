@@ -1,6 +1,6 @@
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
-import { Credentials } from '../models/Credentials';
-import { useSecurityStore } from '../stores/SecutiryStore';
+import useSecurityStore from '../stores/SecutiryStore';
+import Credentials from '../types/Credentials';
 
 export default function LoginForm() {
 

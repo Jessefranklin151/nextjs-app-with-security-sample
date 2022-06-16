@@ -1,21 +1,9 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Credentials } from '../models/Credentials';
+import Credentials from '../types/Credentials';
+import SecurityStore from '../types/SecurityStore';
 
-interface SecurityStore {
-    user?: User;
-    login: (credentials: Credentials) => Promise<User | undefined>;
-    logged: boolean;
-    token?: string | null;
-    signOut: () => void
-}
-
-interface User {
-    name: string;
-    email: string;
-}
-
-export const useSecurityStore = create<SecurityStore>(
+const useSecurityStore = create<SecurityStore>(
     persist(
         (set, get) => ({
             user: undefined,
@@ -39,3 +27,5 @@ export const useSecurityStore = create<SecurityStore>(
         }
     )
 );
+
+export default useSecurityStore;
