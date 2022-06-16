@@ -12,14 +12,13 @@ const useSecurityStore = create<SecurityStore>(
             logged: false,
             token: undefined,
             login: async (credentials: Credentials) => {
-                const response = await HttpClient.post("/api/login", JSON.stringify(credentials))
-                console.log(response)
+                const response = await HttpClient.post("/api/login", credentials)
                 if (response.status === 200) {
                     const authToken = response.headers.get("Authorization");
-                    const user = response.json();
-                    set(({ token: authToken, logged: true }))
-                    return user;
+                    const user = await response.json();
+                    set(({ token: authToken, logged: true, user }))
                 }
+                return response;
             },
             getUser: async () => {
                 const response = await HttpClient.get("/api/user");

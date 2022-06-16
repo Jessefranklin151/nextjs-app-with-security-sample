@@ -19,9 +19,8 @@ app.listen(3333);
 createDatabaseExample();
 
 app.post("/api/v1/login", async (req, res) => {
-    const { username, password, name } = await req.body;
+    const { username, password } = await req.body;
     const user = db.find(user => user.username === username);
-
     if (!user) {
         res.status(401)
         res.json({
@@ -35,7 +34,7 @@ app.post("/api/v1/login", async (req, res) => {
                     expiresIn: 3600 // expires in 1hr
                 });
                 res.setHeader('Authorization', `bearer ${token}`);
-                res.json(user);
+                res.json({ id: user.id, username: user.username, name: user.name });
             } else {
                 res.status(401)
                 res.json({

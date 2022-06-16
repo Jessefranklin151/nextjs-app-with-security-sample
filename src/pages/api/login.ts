@@ -8,12 +8,14 @@ export default async function handler(
   res: NextApiResponse<any>
 ) {
   if (req.method === "POST") {
-    const response = await HttpClient.post("http://localhost:3333/api/v1/login", req.body);
-    const token = response.headers.get("Authorization");
+    const credentials = req.body;
+    const clientResponse = await HttpClient.post("http://localhost:3333/api/v1/login", credentials);
+    const response = await clientResponse.json();
+    const token = clientResponse.headers.get("Authorization")
     if (token) {
       res.setHeader("Authorization", token)
     }
-    res.status(response.status)
-    res.json(response.body);
+    res.status(clientResponse.status);
+    res.json(response);
   }
 }

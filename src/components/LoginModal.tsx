@@ -34,7 +34,7 @@ export default function LoginModal({ isOpen, closeModal }: LoginModalProps) {
                             leaveTo="opacity-0 scale-95"
                         >
                             <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                <LoginForm />
+                                <LoginForm closeModal={closeModal} />
                             </Dialog.Panel>
                         </Transition.Child>
                     </div>
