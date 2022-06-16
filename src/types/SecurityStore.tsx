@@ -1,5 +1,5 @@
-import Credentials from "./Credentials";
-import User from "./User";
+import type User from "./User";
+import type Credentials from "./Credentials";
 
 export default interface SecurityStore {
     user?: User;

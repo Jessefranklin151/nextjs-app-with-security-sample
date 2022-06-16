@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, MouseEventHandler } from 'react';
+import { Fragment } from 'react';
 import LoginForm from './LoginForm';
 
 interface LoginModalProps {

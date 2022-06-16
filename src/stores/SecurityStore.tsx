@@ -1,7 +1,7 @@
 import create from 'zustand';
 import { persist } from 'zustand/middleware';
-import Credentials from '../types/Credentials';
-import SecurityStore from '../types/SecurityStore';
+import type Credentials from '../types/Credentials';
+import type SecurityStore from '../types/SecurityStore';
 
 const useSecurityStore = create<SecurityStore>(
     persist(
@@ -20,7 +20,7 @@ const useSecurityStore = create<SecurityStore>(
                     return user;
                 }
             },
-            signOut: () => set(() => ({ token: undefined, logged: false, user: undefined }))
+            signOut: () => set(() => ({ token: undefined, logged: false, user: undefined })),
         }),
         {
             name: "auth_store"
