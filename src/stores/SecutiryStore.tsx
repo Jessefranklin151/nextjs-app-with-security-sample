@@ -2,13 +2,12 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Credentials } from '../models/Credentials';
 
-
-interface SecutiryStore {
+interface SecurityStore {
     user?: User;
     login: (credentials: Credentials) => Promise<User | undefined>;
     logged: boolean;
     token?: string | null;
-    singout: () => void
+    signOut: () => void
 }
 
 interface User {
@@ -16,9 +15,9 @@ interface User {
     email: string;
 }
 
-export const useSecurityStore = create<SecutiryStore, [["zustand/persist", Partial<SecutiryStore>]]>(
+export const useSecurityStore = create<SecurityStore>(
     persist(
-        (set) => ({
+        (set, get) => ({
             user: undefined,
             logged: false,
             token: undefined,
@@ -30,11 +29,10 @@ export const useSecurityStore = create<SecutiryStore, [["zustand/persist", Parti
                     const user = await response.json();
                     console.log(user);
                     set(({ token: authToken, logged: true, user }))
-
                     return user;
                 }
             },
-            singout: () => set(() => ({ token: undefined, logged: false, user: undefined }))
+            signOut: () => set(() => ({ token: undefined, logged: false, user: undefined }))
         }),
         {
             name: "auth_store"

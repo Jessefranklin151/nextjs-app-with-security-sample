@@ -9,7 +9,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.setHeader("Authorization", "bearer token-exemplo")
+  res.setHeader("Authorization", "bearer token-example")
   res.status(200);
   res.json({
     name: "Josue Francisco"
