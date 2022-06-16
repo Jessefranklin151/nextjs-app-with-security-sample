@@ -1,17 +1,21 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-type Data = {
-  name?: string
-}
+import HttpClient from '../../core/http-client-adapter';
 
-export default function handler(
+export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<any>
 ) {
-  res.setHeader("Authorization", "bearer token-example")
-  res.status(200);
-  res.json({
-    name: "Josue Francisco"
-  });
+  if (req.method === "POST") {
+    const credentials = req.body;
+    const clientResponse = await HttpClient.post("http://localhost:3333/api/v1/login", credentials);
+    const response = await clientResponse.json();
+    const token = clientResponse.headers.get("Authorization")
+    if (token) {
+      res.setHeader("Authorization", token)
+    }
+    res.status(clientResponse.status);
+    res.json(response);
+  }
 }
