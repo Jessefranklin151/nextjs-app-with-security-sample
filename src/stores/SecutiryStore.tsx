@@ -2,16 +2,13 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Credentials } from '../models/Credentials';
 
-// const { REACT_APP_TOKEN_HEADER, REACT_APP_TOKEN_STORAGE_KEY } = process.env;
-
-interface TokenStore {
-    token?: string;
-    setToken?: (token: string | undefined) => void
-}
 
 interface SecutiryStore {
-    user: User | undefined;
-    login: (credentials: Credentials) => Promise<void | Response>
+    user?: User;
+    login: (credentials: Credentials) => Promise<User | undefined>;
+    logged: boolean;
+    token?: string | null;
+    singout: () => void
 }
 
 interface User {
@@ -19,30 +16,28 @@ interface User {
     email: string;
 }
 
-
-const tokenStore = create(
+export const securityStore = create<SecutiryStore, [["zustand/persist", Partial<SecutiryStore>]]>(
     persist(
-        (set, get) => ({
+        (set) => ({
+            user: undefined,
+            logged: false,
             token: undefined,
-            setToken: () => set((token) => ({ token }))
+            login: async (credentials: Credentials) => {
+                console.log(credentials);
+                const response = await fetch("/api/login", { body: JSON.stringify(credentials), method: "POST" });
+                if (response.status === 200) {
+                    const authToken = response.headers.get("Authorization");
+                    const user = await response.json();
+                    console.log(user);
+                    set(({ token: authToken, logged: true, user }))
+
+                    return user;
+                }
+            },
+            singout: () => set(() => ({ token: undefined, logged: false, user: undefined }))
         }),
         {
-            name: "AUTH_TOKEN",
-            getStorage: () => sessionStorage,
+            name: "auth_store"
         }
-    ));
-
-export const securityStore = create<SecutiryStore>(set => ({
-    user: undefined,
-    login: async (credentials: Credentials) => {
-        console.log(credentials);
-        return fetch("/login", { body: JSON.stringify(credentials), method: "POST" }).then(res => {
-            if (res.status === 200) {
-                // const token = res.headers.get(REACT_APP_TOKEN_HEADER!);
-                // const { setToken } = tokenStore();
-
-                // setToken(token);
-            }
-        });
-    }
-}));
+    )
+);

@@ -1,14 +1,21 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
+import { securityStore } from '../stores/SecutiryStore';
 
 function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
-  }
+}
 
 const UserDropdown = () => {
+
+    const { user, singout } = securityStore();
+
     return (<Menu as="div" className="ml-3 relative">
         <div>
-            <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            <Menu.Button className="bg-gray-800 flex justify-center items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+
+                <h2 className="text-white mr-2">{user?.name}</h2>
+
                 <span className="sr-only">Open user menu</span>
                 <img
                     className="h-8 w-8 rounded-full"
@@ -52,6 +59,7 @@ const UserDropdown = () => {
                         <a
                             href="#"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                            onClick={singout}
                         >
                             Sign out
                         </a>
